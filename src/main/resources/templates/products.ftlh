@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>BUYSELL</title>
+    <title>КУПИ-ПРОДАЙ</title>
 </head>
 <body>
-<h1>BUYSELL</h1><hr>
+<h1>КУПИ-ПРОДАЙ</h1><hr>
 <h4>Товары:</h4>
 <form action="/" method="get">
-    Поиск по названию: <input type="text" name="title"><br>
+    Поиск по названию: <input type="text" name="title">
     <input type="submit" value="Поиск"/>
 </form>
 
@@ -20,12 +20,15 @@
 </#list>
 <hr>
 <h3>Cоздать новый товар</h3>
-<form action="/product/create" method="post">
+<form action="/product/create" method="post" enctype="multipart/form-data">
     Название объявления: <input type="text" name="title"/><br><br>
     Описание объявления: <input type="text" name="description"/><br><br>
     Цена: <input type="number" name="price"/><br><br>
     Город: <input type="text" name="city"/><br><br>
     Имя: <input type="text" name="author"/><br><br>
+    Первая фотогорафия: <input type="file" name="file1"/><br><br>
+    Вторая фотогорафия: <input type="file" name="file2"/><br><br>
+    Третья фотогорафия: <input type="file" name="file3"/><br><br>
     <input type="submit" value="Добавить товар"/>
 </form>
 </body>

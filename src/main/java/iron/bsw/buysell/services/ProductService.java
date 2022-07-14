@@ -4,14 +4,12 @@ package iron.bsw.buysell.services;
 import iron.bsw.buysell.models.Image;
 import iron.bsw.buysell.models.Product;
 import iron.bsw.buysell.repositories.ProductRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,13 +24,16 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public void saveProduct(Product product, MultipartFile file1,MultipartFile file2, MultipartFile file3) throws IOException {
+    public void saveProduct(Product product,
+                            MultipartFile file1,
+                            MultipartFile file2,
+                            MultipartFile file3) throws IOException {
         Image image1;
         Image image2;
         Image image3;
         if(file1.getSize() !=0) {
             image1 = toImageEntity(file1);
-            image1.setPreviewImage(true);
+            image1.setPreviewImage(true); //первое изобр - preview
             product.addImageToProduct(image1);
         }
         if(file2.getSize() !=0) {
@@ -44,11 +45,12 @@ public class ProductService {
             product.addImageToProduct(image3);
         }
         log.info("Saving new Product. Title: {}; Author {}",product.getTitle(), product.getAuthor());
-        Product productFromDb = productRepository.save(product);
-        productFromDb.setPreviewImageId(productFromDb.getImages().get(0).getId());
-        productRepository.save(product);
+        Product productFromDb = productRepository.save(product); //сохранить товар
+        productFromDb.setPreviewImageId(productFromDb.getImages().get(0).getId()); // устанавливаем previewId
+        productRepository.save(product); //обновляем текущий созданный товар
     }
 
+    // преобразование из MultipartFile к фотографии
     private Image toImageEntity(MultipartFile file) throws IOException {
         Image image = new Image();
         image.setName(file.getName());
@@ -56,8 +58,7 @@ public class ProductService {
         image.setContentType(file.getContentType());
         image.setSize(file.getSize());
         image.setBytes(file.getBytes());
-        return image
-
+        return image;
     }
 
     public void deleteProduct(Long id) {

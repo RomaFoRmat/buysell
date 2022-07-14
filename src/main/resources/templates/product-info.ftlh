@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>BUYSELL</title>
+    <title>КУПИ-ПРОДАЙ</title>
 </head>
 <body>
-<h1>BUYSELL</h1><hr>
+<h1>КУПИ-ПРОДАЙ</h1><hr>
 <h4>Подробная информация о товаре:</h4>
+<#--<img src="/images/${product.images.get(0)}" height = "60px"><br>-->
+<#--<img src="/images/${product.images.get(1)}" height = "60px"><br>-->
+<#--<img src="/images/${product.images.get(2)}" height = "60px"><br>-->
+<#list images as img>
+    <img src="/images/${img.id}" height="150px"/>
+</#list>
+<br>
 <b>Название товара: </b>${product.title}<br>
 <b>Описание товара: </b>${product.description}<br>
 <b>Цена: </b>${product.price}<br>

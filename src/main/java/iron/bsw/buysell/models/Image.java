@@ -22,13 +22,14 @@ public class Image {
     @Column(name = "size")
     private Long size;
     @Column(name = "contentType")
-    private String contentType;
+    private String contentType; //расширение файла
     @Column(name = "isPreviewImage")
     private boolean isPreviewImage;
     @Lob
 //    @Column(columnDefinition = "LONGBLOB")
     private byte[] bytes;
 
+    //ForeignKey:
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     private Product product;
 

@@ -16,20 +16,24 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/")
-    public String products(@RequestParam(name ="title", required = false) String titile, Model model) {
-        model.addAttribute("products", productService.productList(titile));
+    public String products(@RequestParam(name ="title", required = false) String title, Model model) {
+        model.addAttribute("products", productService.productList(title));
         return "products";
     }
 
     @GetMapping("product/{id}")
     public String productInfo(@PathVariable Long id, Model model) {
-
-        model.addAttribute("product", productService.getProductById(id));
+        Product product = productService.getProductById(id);
+        model.addAttribute("images",product.getImages());
+//        model.addAttribute("product", productService.getProductById(id));
+        model.addAttribute("product", product);
         return "product-info";
     }
     @PostMapping("/product/create")
-    public String createProduct(@RequestParam("file1") MultipartFile file1, @RequestParam("file2") MultipartFile file2,
-                                @RequestParam("file3") MultipartFile file3,Product product) throws IOException {
+    public String createProduct(@RequestParam("file1") MultipartFile file1,
+                                @RequestParam("file2") MultipartFile file2,
+                                @RequestParam("file3") MultipartFile file3,
+                                Product product) throws IOException {
         productService.saveProduct(product, file1, file2, file3);
         return "redirect:/";
     }
