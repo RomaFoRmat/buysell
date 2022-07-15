@@ -29,12 +29,14 @@ public class Product {
     private int price;
     @Column(name="city")
     private String city;
-    @Column(name="author")
-    private String author;
-
+//    @Column(name="author")
+//    private String author;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
     private List<Image> images = new ArrayList<>();
     private Long previewImageId;
+    @ManyToOne(cascade = CascadeType.REFRESH,fetch = FetchType.LAZY) //refresh-при удаление товара никак не должно отразится на сущности user
+    @JoinColumn()
+    private User user;
     private LocalDateTime dateOfCreated;
 
     @PrePersist //инициализация бина в спринге

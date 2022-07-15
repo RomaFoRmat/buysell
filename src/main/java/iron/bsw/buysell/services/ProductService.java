@@ -3,13 +3,16 @@ package iron.bsw.buysell.services;
 
 import iron.bsw.buysell.models.Image;
 import iron.bsw.buysell.models.Product;
+import iron.bsw.buysell.models.User;
 import iron.bsw.buysell.repositories.ProductRepository;
+import iron.bsw.buysell.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -17,6 +20,7 @@ import java.util.List;
 @Slf4j
 public class ProductService {
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
     //search
     public List<Product> productList(String title) {
@@ -24,10 +28,12 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public void saveProduct(Product product,
+    public void saveProduct(Principal principal, //обёртка состояния юзера
+                            Product product,
                             MultipartFile file1,
                             MultipartFile file2,
                             MultipartFile file3) throws IOException {
+        product.setUser(getUserByPrincipal(principal));
         Image image1;
         Image image2;
         Image image3;
@@ -44,10 +50,15 @@ public class ProductService {
             image3 = toImageEntity(file2);
             product.addImageToProduct(image3);
         }
-        log.info("Saving new Product. Title: {}; Author {}",product.getTitle(), product.getAuthor());
+        log.info("Saving new Product. Title: {}; Author email {}",product.getTitle(), product.getUser().getEmail());
         Product productFromDb = productRepository.save(product); //сохранить товар
         productFromDb.setPreviewImageId(productFromDb.getImages().get(0).getId()); // устанавливаем previewId
         productRepository.save(product); //обновляем текущий созданный товар
+    }
+
+    public User getUserByPrincipal(Principal principal) {
+        if (principal == null) return new User();
+        return userRepository.findByEmail(principal.getName());
     }
 
     // преобразование из MultipartFile к фотографии
