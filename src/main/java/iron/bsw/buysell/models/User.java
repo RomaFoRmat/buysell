@@ -19,7 +19,7 @@ public class User implements UserDetails {
     private Long id;
     @Column(name = "email", unique = true)
     private String email;
-    @Column(name = "phoneNumber")
+    @Column(name = "phone_number")
     private String phoneNumber;
     @Column(name = "name")
     private String name;
@@ -44,6 +44,10 @@ public class User implements UserDetails {
     }
 
     //secirity
+
+    public boolean isAdmin() {
+        return roles.contains(Role.ROLE_ADMIN);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
